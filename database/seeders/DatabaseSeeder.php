@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Estudiante;
 use App\Models\Proyecto;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Schema;
@@ -20,9 +21,18 @@ class DatabaseSeeder extends Seeder
         Model::unguard();
         Schema::disableForeignKeyConstraints();
 
-        // llamadas a otros ficheros de seed
-        $this->call(UsersTableSeeder::class);
-        // llamadas a otros ficheros de seed
+        // \App\Models\User::factory(10)->create();
+
+        self::seedUsers();
+        $this->command->info('Tabla usuarios inicializada con datos!');
+
+        \App\Models\User::factory()->create([
+            'name' => 'Test User',
+            'nombre' => 'Admin',
+            'apellidos' => 'Admin',
+            'email' => env('ADMIN_EMAIL', 'admin@email.com'),
+            'password' => env('ADMIN_PASSWORD', 'password'),
+        ]);
 
         $this->call(EstudiantesTableSeeder::class);
         $this->call(ReconocimientosTableSeeder::class);
@@ -40,15 +50,27 @@ class DatabaseSeeder extends Seeder
     private static function seedProyectos(): void
     {
         Proyecto::truncate();
-        foreach( self::$arrayProyectos as $proyecto ) {
+        foreach (self::$arrayProyectos as $proyecto) {
             $p = new Proyecto;
             $p->docente_id = $proyecto['docente_id'];
             $p->nombre = $proyecto['nombre'];
             $p->dominio = $proyecto['dominio'];
             $p->metadatos = serialize($proyecto['metadatos']);
+            $p->calificacion = random_int(3, 10);
             $p->save();
         }
     }
+
+
+    private static function seedUsers(): void
+    {
+
+        User::truncate();
+        \App\Models\User::factory(2)->create();
+    }
+
+
+
     private static $arrayProyectos = [
         [
             'docente_id' => 1,
@@ -152,4 +174,3 @@ class DatabaseSeeder extends Seeder
         ],
     ];
 }
-

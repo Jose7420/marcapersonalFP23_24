@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Proyecto;
 use Illuminate\Http\Request;
+use PhpParser\Node\Expr\FuncCall;
 
 class CatalogController extends Controller
 {
@@ -22,13 +23,14 @@ class CatalogController extends Controller
             ->with('id', $proyecto->id);
     }
 
-    public function putEdit($id)
+    public function putEdit(Request $request, $id)
     {
         $proyecto = Proyecto::FindOrFail($id);
-        $proyecto->metadatos = unserialize($proyecto->metadatos);
-        return view('catalog.edit')
-            ->with('proyecto', $proyecto)
-            ->with('id', $proyecto->id);
+        $proyecto->update($request->all());
+        return redirect(action([self::class, 'getShow'], ['id' => $proyecto->id]));
+        // return view('catalog.edit')
+        //     ->with('proyecto', $proyecto)
+        //     ->with('id', $proyecto->id);
     }
 
     public function getEdit($id)
@@ -42,6 +44,16 @@ class CatalogController extends Controller
 
     public function getCreate()
     {
+
         return view('catalog.create');
     }
+
+
+    public function store(Request $request) {
+        $proyecto = Proyecto::create($request->all());
+
+        return redirect(action([self::class, 'getShow'], ['id' => $proyecto->id]));
+    }
+
+
 }

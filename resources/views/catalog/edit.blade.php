@@ -37,6 +37,12 @@
                     {{print_r($proyecto['metadatos'],true)}}
                    </textarea>
 	            </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label for="calificacion">Calificacion</label>
+                        <input type="number" min="1" max="10" name="calificacion" id="calificacion" value="{{ $proyecto['calificacion'] }}"class="form-control">
+                     </div>
+                </div>
 
 	            <div class="form-group text-center">
 	               <button type="submit" class="btn btn-primary" style="padding:8px 100px;margin-top:25px;">
