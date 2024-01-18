@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CicloResource;
 use App\Models\Ciclo;
+use App\Helpers\FilterHelper;
 use Illuminate\Http\Request;
+
 
 class CicloController extends Controller
 {
@@ -15,8 +17,11 @@ class CicloController extends Controller
      */
     public function index(Request $request)
     {
+        $query = Ciclo::query();
+        FilterHelper::applyFilter($query, $request->q, ['nombre']);
+
         return CicloResource::collection(
-            Ciclo::orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
+            $query->orderBy($request->_sort ?? 'id', $request->_order ?? 'asc')
             ->paginate($request->perPage));
     }
 
