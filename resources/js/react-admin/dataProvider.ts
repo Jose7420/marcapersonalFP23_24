@@ -1,6 +1,8 @@
 // in resources/js/react-admin/dataProvider.ts
 import { fetchUtils } from 'react-admin';
 import jsonServerProvider from "ra-data-json-server";
+import { stringify } from 'query-string';
+
 
 const httpClient = (url, options = {}) => {
     if (!options.headers) {
@@ -46,6 +48,21 @@ dataProvider.deleteToken = () => {
 dataProvider.getIdentity = () => {
     return httpClient(`${apiUrl}/user`, {
         method: 'GET',
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+    });
+};
+
+dataProvider.postLogin = (email, password) => {
+    return httpClient(`${apiUrl}/login`, {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+    });
+};
+
+dataProvider.postLogout = () => {
+    return httpClient(`${apiUrl}../../../logout`, {
+        method: 'POST',
         headers: new Headers({ 'Content-Type': 'application/json' }),
     });
 };
