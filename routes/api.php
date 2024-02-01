@@ -30,6 +30,8 @@ use App\Http\Controllers\API\CountController;
 */
 
 Route::prefix('v1')->group(function () {
+    Route::get('curriculos', [CurriculoController::class, 'index']);
+    Route::get('curriculos/{curriculo}', [CurriculoController::class, 'show']);
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user', function (Request $request) {
             $user = $request->user();
