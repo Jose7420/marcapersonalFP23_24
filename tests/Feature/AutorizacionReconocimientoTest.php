@@ -37,6 +37,8 @@ class AutorizacionReconocimientoTest extends TestCase
             'docente_validador' => 35,
         ];
         return $this->postJson(self::$apiurl_reconocimiento, $data);
+
+
     }
 
     public function reconocimientoUpdate($propio = false) : TestResponse
