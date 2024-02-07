@@ -66,4 +66,30 @@ dataProvider.postLogout = () => {
     });
 };
 
+dataProvider.update = (resource, params) => {
+    if (resource !== 'proyectos' || !params.data.fichero) {
+        return dataProvider.update(resource, params);
+    }
+
+    let formData = new FormData();
+    for (const property in params.data) {
+        formData.append(`${property}`, `${params.data[property]}`);
+    }
+
+    formData.append('fichero', params.data.fichero.rawFile)
+    formData.append('_method', 'PUT')
+
+    const url = `${apiUrl}/${resource}/${params.id}`
+    return httpClient(url, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(json => {
+        return {
+            ...json,
+            data: json.json
+        }
+    })
+};
+
 export { dataProvider };

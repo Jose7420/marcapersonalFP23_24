@@ -62,8 +62,11 @@ class ProyectoController extends Controller
      */
     public function update(Request $request, Proyecto $proyecto)
     {
-
-        $proyectoData = json_decode($request->getContent(), true);
+        $proyectoData = $request->all();
+        if($proyectoRepoZip = $request->file('fichero')) {
+            $path = $proyectoRepoZip->store('repoZips',['disk' => 'public']);
+            $proyectoData['fichero'] = $path;
+        }
         $proyecto->update($proyectoData);
 
         return new ProyectoResource($proyecto);
